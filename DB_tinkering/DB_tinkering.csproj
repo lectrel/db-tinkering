@@ -33,8 +33,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Features\Locations\Controllers\"/>
-        <Folder Include="Features\Locations\Queries\"/>
         <Folder Include="Features\OrderProposals\Controllers\"/>
         <Folder Include="Features\OrderProposals\Queries\"/>
     </ItemGroup>
