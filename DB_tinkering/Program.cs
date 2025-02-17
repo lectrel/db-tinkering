@@ -1,28 +1,17 @@
+using System.Reflection;
 using DB_tinkering.DB.Contexts;
-using DB_tinkering.DB.Models;
-using Microsoft.AspNetCore.Mvc;
+using DB_tinkering.Features.Locations.Models;
+using DB_tinkering.Features.OrderProposals.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddDbContext<OrderProposalContext>();
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
 var app = builder.Build();
 
 app.MapGet("/locations", async (OrderProposalContext db) => await db.Locations.ToListAsync());
-
-app.MapGet("/products",
-    async (OrderProposalContext db,
-        [FromQuery(Name = "withSuppliers")] bool withSuppliers = false,
-        [FromQuery(Name = "withGroups")] bool withGroups = false
-    ) =>
-    {
-        IQueryable<Product> products = db.Products;
-        if (withSuppliers) products = products.Include(product => product.Supplier);
-        if (withGroups) products = products.Include(p => p.ProductGroup);
-        return await products.ToListAsync();
-    });
 
 app.MapGet("/orderproposals", async (OrderProposalContext db) => await db.OrderProposals.ToListAsync());
 
@@ -35,15 +24,6 @@ app.MapPost("/locations",
         return Results.Created($"/locations/{location.Code}", location);
     });
 
-app.MapPost("/products",
-    async (OrderProposalContext db, Product product) =>
-    {
-        db.Products.Add(product);
-        await db.SaveChangesAsync();
-
-        return Results.Created($"/locations/{product.Code}", product);
-    });
-
 app.MapPost("/orderproposals",
     async (OrderProposalContext db, OrderProposal order) =>
     {
@@ -52,5 +32,7 @@ app.MapPost("/orderproposals",
 
         return Results.Created($"/locations/{order.OrderNumber}", order);
     });
+
+app.MapControllers();
 
 await app.RunAsync();

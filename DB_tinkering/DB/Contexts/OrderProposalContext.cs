@@ -1,4 +1,7 @@
 using DB_tinkering.DB.Models;
+using DB_tinkering.Features.Locations.Models;
+using DB_tinkering.Features.OrderProposals.Models;
+using DB_tinkering.Features.Products.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DB_tinkering.DB.Contexts;
@@ -12,6 +15,8 @@ public class OrderProposalContext(IConfiguration configuration) : DbContext
     public DbSet<Supplier> Suppliers { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseNpgsql(configuration["ConnectionStrings:DefaultConnection"])
+    {
+        optionsBuilder.UseNpgsql(configuration["ConnectionStrings:DefaultConnection"])
             .UseSnakeCaseNamingConvention();
+    }
 }
