@@ -1,0 +1,18 @@
+@DB_tinkering_HostAddress = http://localhost:5185
+
+GET {{DB_tinkering_HostAddress}}/locations/
+Accept: application/json
+
+###
+
+GET {{DB_tinkering_HostAddress}}/products/
+Accept: application/json
+
+###
+
+GET {{DB_tinkering_HostAddress}}/orderproposals/
+Accept: application/json
+
+###
+
+
